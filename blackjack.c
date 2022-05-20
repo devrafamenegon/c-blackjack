@@ -27,4 +27,42 @@ int main(void) {
 	do{
 		start = getchar();
 	} while (start != '\n');
+	
+	startGame();
+}
+
+int startGame(void){
+	
+	int cards[52];
+	
+	int playerCards[5];
+	int botCards[5];
+	
+	int sumOfPlayerCards = 0;
+	int sumOfBotCards = 0;
+	
+	//Embaralhando o baralho
+	
+	int t;
+	int i;
+	int desk[52];
+	
+	srand(time(NULL));
+	
+	for (i = 0; i < 52; i++){
+		desk[i] = ( i/13 + 3 ) * 100 + i % 13 + 1;
+	}
+	
+	srand(time(NULL));
+	
+	for (i = 0; i < 52; i++)
+	{
+		do
+		{
+			t = rand() % 52;
+		} while (desk[t] == 0);
+
+		cards[i] = desk[t];
+		desk[t] = 0;
+	}
 }
