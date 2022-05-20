@@ -65,4 +65,75 @@ int startGame(void){
 		cards[i] = desk[t];
 		desk[t] = 0;
 	}
+	
+	//Passando as cartas ao Jogador
+	playerCards[0] = cards[0];
+	playerCards[1] = cards[1];
+	
+	//Passando as cartas ao Bot
+	botCards[0] = cards[2];
+	botCards[1] = cards[3];
+	
+	//Mostrando as cartas
+	char cardSuit = botCards[0] / 100;
+	int cardNumber = botCards[0] % 100;
+	
+	printf("\nUma das cartas do Bot: \n\n");
+	
+	switch (cardNumber)
+	{
+		case 1: 
+		{
+			printf("*******\n");
+			printf("*     *\n");
+			printf("* %c   *\n", cardSuit);
+			printf("*   A *\n");
+			printf("*     *\n");
+			printf("*******\n");
+			break;
+		}		
+		
+		case 11:
+		{
+			printf("*******\n");
+			printf("*     *\n");
+			printf("* %c   *\n", cardSuit);
+			printf("*   J *\n");
+			printf("*     *\n");
+			printf("*******\n");
+			break;
+		}
+		
+		case 12:
+		{
+			printf("*******\n");
+			printf("*     *\n");
+			printf("* %c   *\n", cardSuit);
+			printf("*   Q *\n");
+			printf("*     *\n");
+			printf("*******\n");
+			break;
+		}
+		
+		case 13:
+		{
+			printf("*******\n");
+			printf("*     *\n");
+			printf("* %c   *\n", cardSuit);
+			printf("*   K *\n");
+			printf("*     *\n");
+			printf("*******\n");
+			break;
+		}
+		
+		default: {
+			printf("*******\n");
+			printf("*     *\n");
+			printf("* %c   *\n", cardSuit);
+			printf("*  %2d *\n", cardNumber);
+			printf("*     *\n");
+			printf("*******\n");
+			break;
+		}
+	}
 }
