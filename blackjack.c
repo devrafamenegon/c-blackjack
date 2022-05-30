@@ -19,29 +19,6 @@
 int main(void) {
 	setlocale(LC_ALL, "Portuguese");
 	
-	char start;
-	
-	printf(
-		"\n\tBem vindo ao\n\n\t"
-		"88          88                       88        88                       88\n\t"         
-		"88          88                       88        ''                       88\n\t"         
-		"88          88                       88                                 88\n\t"       
-		"88,dPPYba,  88 ,adPPYYba,  ,adPPYba, 88   ,d8  88 ,adPPYYba,  ,adPPYba, 88   ,d8\n\t"  
-		"88P      8a 88        `Y8 a8         88 ,a8    88        `Y8 a8         88 ,a8\n\t"    
-		"88       d8 88 ,adPPPPP88 8b         8888[     88 ,adPPPPP88 8b         8888[\n\t"      
-		"88b,   ,a8  88 88,    ,88  8a,   ,aa 88  Yba,  88 88,    ,88  8a,   ,aa 88  Yba,\n\t"   
-		"8Y Ybbd8    88   8bbdP Y8    Ybbd8   88    Y8a 88   8bbdP Y8    Ybbd8   88    Y8a\n\t" 
-		"                                             ,88\n\t"                                 
-		"                                            888P\n\n"
-		                                        
-		"\tVocê pode sair a qualquer momento apertando Ctrl + C.\n"
-		"\tDivirta-se!, aperte Enter para começar......"
-	);
-	
-	do{
-		start = getchar();
-	} while (start != '\n');
-	
 	startGame();
 }
 
@@ -108,22 +85,7 @@ void printCard(int cardNumberAndSuit){
 	}
 }
 
-int startGame(void){
-	
-	system("cls");
-	
-	int cards[52];
-	
-	int playerCards[5];
-	int botCards[5];
-	
-	int sumOfPlayerCards = 0;
-	int sumOfBotCards = 0;
-	
-	char aceValue;
-	
-	//Embaralhando o baralho
-	
+int shuffle(int cards[]){
 	int t;
 	int i;
 	int desk[52];
@@ -146,6 +108,50 @@ int startGame(void){
 		cards[i] = desk[t];
 		desk[t] = 0;
 	}
+	
+	return 0;
+}
+
+int startGame(void){
+	
+	char start;
+	
+	printf(
+		"\n\tBem vindo ao\n\n\t"
+		"88          88                       88        88                       88\n\t"         
+		"88          88                       88        ''                       88\n\t"         
+		"88          88                       88                                 88\n\t"       
+		"88,dPPYba,  88 ,adPPYYba,  ,adPPYba, 88   ,d8  88 ,adPPYYba,  ,adPPYba, 88   ,d8\n\t"  
+		"88P      8a 88        `Y8 a8         88 ,a8    88        `Y8 a8         88 ,a8\n\t"    
+		"88       d8 88 ,adPPPPP88 8b         8888[     88 ,adPPPPP88 8b         8888[\n\t"      
+		"88b,   ,a8  88 88,    ,88  8a,   ,aa 88  Yba,  88 88,    ,88  8a,   ,aa 88  Yba,\n\t"   
+		"8Y Ybbd8    88   8bbdP Y8    Ybbd8   88    Y8a 88   8bbdP Y8    Ybbd8   88    Y8a\n\t" 
+		"                                             ,88\n\t"                                 
+		"                                            888P\n\n"
+		                                        
+		"\tVocê pode sair a qualquer momento apertando Ctrl + C.\n"
+		"\tDivirta-se!, aperte Enter para começar......"
+	);
+	
+	do{
+		start = getchar();
+	} while (start != '\n');
+	
+	system("cls");
+	
+	int cards[52];
+	
+	int playerCards[5];
+	int botCards[5];
+	
+	int sumOfPlayerCards = 0;
+	int sumOfBotCards = 0;
+	
+	char aceValue;
+	int i;
+	
+	//Embaralhando o baralho
+	shuffle(cards);
 	
 	//Passando as cartas ao Jogador
 	playerCards[0] = cards[0];
@@ -170,7 +176,7 @@ int startGame(void){
 		if(playerCards[i] % 100 == 1){
 			
 			//Definindo o valor do Ás
-			printf("Escolha o valor do Ás (carta %d), a) '11' ou b) '1': ");
+			printf("\nEscolha o valor do Ás (carta %d), a) '11' ou b) '1': ", i + 1);
 			do {
 				aceValue = getchar();
 			} while (aceValue != 'a' && aceValue != 'b');
@@ -193,7 +199,37 @@ int startGame(void){
 		
 		//Somando o valor das cartas numéricas
 		else {
-			sumOfPlayerCards += (playerCards % 100);
+			sumOfPlayerCards += (playerCards[i] % 100);
+		}
+	}
+	
+	printf("\nSoma das cartas do Jogador: %d\n\n", sumOfPlayerCards);
+	
+	if(sumOfPlayerCards > 21){
+		printf("Computador Venceu!\n");
+		return 1;
+	}
+	
+	else if(sumOfPlayerCards == 21){
+		printf("Jogador Venceu!\n");
+		return 0;
+	}
+	
+	//Caso o jogador queira mais cartas
+	for (i = 0; i < 3; i++){
+		char moreCards;
+		
+		printf("Deseja receber mais cartas? Digite 's' ou 'n': ");
+		
+		do{
+			moreCards = getchar();
+		} while(moreCards != 's' && moreCards != 'n');
+		
+		if(moreCards == 's'){
+			playerCards[i + 2] = cards[i + 4];
+			printf("\n\nVocê recebeu outra carta!\n");
+			printf("Sua %d° carta é:\n\n", i + 3);
+			printCard(playerCards[i + 2]);
 		}
 	}
 }
