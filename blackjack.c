@@ -19,6 +19,22 @@
 #include <time.h>
 #include "blackjack.h"
 
+int checkPlayerGameSituation(int sumOfPlayerCards){
+	if(sumOfPlayerCards > 21){
+		printf("Dealer Venceu!\n");
+		return 1;
+	}
+	
+	else if(sumOfPlayerCards == 21){
+		printf("Soma das cartas 21, Você Venceu!\n");
+		return 2;
+	}
+	
+	else {
+		return 0;
+	}
+}
+
 //Função para printar as cartas em tela
 void printCard(int cardNumberAndSuit){
 	
@@ -95,9 +111,7 @@ int shuffle(int cards[]){
 	int t;
 	int i;
 	int desk[52];
-	
-	srand(time(NULL));
-	
+		
 	for (i = 0; i < 52; i++){
 		desk[i] = ( i/13 + 3 ) * 100 + i % 13 + 1;
 	}
@@ -120,6 +134,17 @@ int shuffle(int cards[]){
 
 //Função de início de jogo (separada da main para podermos reiniciar o jogo facilmente)
 void startGame(void){
+	
+	int cards[52];
+	
+	int playerCards[5];
+	int dealerCards[5];
+	
+	int sumOfPlayerCards = 0;
+	int sumOfdealerCards = 0;
+	
+	char aceValue;
+	int i;
 	
 	char start;
 	
@@ -146,17 +171,6 @@ void startGame(void){
 	
 	system("cls");
 	
-	int cards[52];
-	
-	int playerCards[5];
-	int dealerCards[5];
-	
-	int sumOfPlayerCards = 0;
-	int sumOfdealerCards = 0;
-	
-	char aceValue;
-	int i;
-	
 	//Embaralhando o baralho
 	shuffle(cards);
 	
@@ -181,7 +195,6 @@ void startGame(void){
 	for (i = 0; i < 2; i++){
 		
 		if(playerCards[i] % 100 == 1){
-			
 			//Definindo o valor do Ás
 			printf("\nEscolha o valor do Ás (carta %d), a) '11' ou b) '1': ", i + 1);
 			do {
@@ -212,15 +225,7 @@ void startGame(void){
 	
 	printf("\nSoma das cartas do Jogador: %d\n\n", sumOfPlayerCards);
 	
-	if(sumOfPlayerCards > 21){
-		printf("Dealer Venceu!\n");
-		return;
-	}
-	
-	else if(sumOfPlayerCards == 21){
-		printf("Soma das cartas 21, Você Venceu!\n");
-		return;
-	}
+	checkPlayerGameSituation(sumOfPlayerCards);
 	
 	//Caso o jogador queira mais cartas
 	for (i = 0; i < 3; i++){
@@ -238,17 +243,70 @@ void startGame(void){
 			printf("Sua %d° carta é:\n\n", i + 3);
 			printCard(playerCards[i + 2]);
 		}
+		
+		else {
+			return;
+		}
+		
+		if(playerCards[i + 2] % 100 == 1){
+			
+			//Definindo o valor do Ás
+			printf("\nEscolha o valor do Ás (carta %d), a) '11' ou b) '1': ", i + 1);
+			do {
+				aceValue = getchar();
+			} while (aceValue != 'a' && aceValue != 'b');
+			
+			//Ás valendo 11
+			if(aceValue == 'a'){
+				sumOfPlayerCards += 11;
+			}
+			
+			//Ás valendo 1
+			else {
+				sumOfPlayerCards += 1;
+			}
+		}
+		
+		//Somando o valor do rei, dama ou valete
+		else if(playerCards[i + 2] % 100 > 10){
+			sumOfPlayerCards += 10;
+		}
+		
+		//Somando o valor das cartas numéricas
+		else {
+			sumOfPlayerCards += (playerCards[i + 2] % 100);
+		}
+		
+		printf("\nSoma das cartas do Jogador: %d\n\n", sumOfPlayerCards);
+		
+		int playerGameSituation = checkPlayerGameSituation(sumOfPlayerCards);
+		
+		if(playerGameSituation != 0) return;
 	}
 	
 	if (i == 3)
 	{
 		printf("Parabéns, você venceu! Pois a soma de suas 5 cartas não ultrapassou 21.\n");
-		return 0;
+		return;
 	}
 }
 
 int main(void) {
 	setlocale(LC_ALL, "Portuguese");
 	
+	char again;
+	
 	startGame();
+	
+	printf("\nDeseja jogar novamente? Digite 's' ou 'n':\n");
+	do{
+		again = getchar();
+	} while (again!='s' && again!='n');
+   
+	if (again == 's')
+	{
+		main();
+	}
+  
+	return 0;
 }
