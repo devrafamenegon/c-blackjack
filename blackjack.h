@@ -1,4 +1,6 @@
 void startGame();
+void restartGame();
 int shuffle(int cards[]);
+int standardizeValueOfRealCards(int carta);
 void printCard(int cardNumberAndSuit);
-int checkPlayerGameSituation(int sumOfPlayerCards);
+void checkGameSituation(int sumOfPlayerCards, int sumOfDealerCards, int* gameStatus);
